@@ -5,6 +5,10 @@
     "name": "Stephen Mathieson",
     "email": "me@stephenmathieson.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/stephenmathieson/node-expand.git"
+  },
   "main": "index.js",
   "dependencies": {
     "glob": "~3.1.21"
