@@ -5,7 +5,7 @@
 var vows = require('vows'),
 	assert = require('assert'),
 	glob = require('glob'),
-	expand = require('../');
+	globs = require('../');
 
 function single(pattern) {
 	return {
@@ -18,7 +18,7 @@ function single(pattern) {
 					return callback(err);
 				}
 
-				expand(pattern, function (err, actual) {
+				globs(pattern, function (err, actual) {
 					if (err) {
 						return callback(err);
 					}
@@ -37,7 +37,7 @@ function single(pattern) {
 }
 
 vows
-	.describe('expand')
+	.describe('globs')
 	.addBatch({
 		'single pattern': {
 			'as string': single('./fixtures/*.js'),
@@ -60,7 +60,7 @@ vows
 						'./fixtures/c.js'
 					];
 
-					expand(patterns, function (err, actual) {
+					globs(patterns, function (err, actual) {
 						if (err) {
 							return callback(err);
 						}

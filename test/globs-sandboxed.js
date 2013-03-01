@@ -2,13 +2,13 @@
 
 /*jshint unused:false*/
 
-var expand,
+var globs,
 	patterns = [],
 	vows = require('vows'),
 	assert = require('assert'),
 	sandbox = require('sandboxed-module');
 
-expand = sandbox.require('..', {
+globs = sandbox.require('..', {
 	requires: {
 		glob: function (pattern, cb) {
 			patterns.push(pattern);
@@ -18,7 +18,7 @@ expand = sandbox.require('..', {
 });
 
 vows
-	.describe('expand (mocked glob)')
+	.describe('globs (mocked glob)')
 	.addBatch({
 		'multiple patterns': {
 			topic: function () {
@@ -30,7 +30,7 @@ vows
 						'/baz/bang/*.cherries'
 					];
 
-				expand(expected, function (err) {
+				globs(expected, function (err) {
 					if (err) {
 						return callback(err);
 					}
@@ -54,7 +54,7 @@ vows
 				var callback = this.callback,
 					pattern = '/foo/**/bang/**/*.apples';
 
-				expand(pattern, function (err) {
+				globs(pattern, function (err) {
 					if (err) {
 						return callback(err);
 					}

@@ -1,14 +1,14 @@
-# expand
+# globs
 
 An extension of [glob], allowing you to provide one or more patterns to match.
 
 ## usage
 
 ```js
-var expand = require('expand');
+var globs = require('globs');
 
 // a single pattern
-expand('**/*.js', function (err, files) {
+globs('**/*.js', function (err, files) {
 	if (err) {
 		throw err;
 	}
@@ -17,7 +17,7 @@ expand('**/*.js', function (err, files) {
 });
 
 // multiple patterns
-expand([ '**/*.js', '/foo/bar/*.coffee' ], function (err, files) {
+globs([ '**/*.js', '/foo/bar/*.coffee' ], function (err, files) {
 	if (err) {
 		throw err;
 	}
