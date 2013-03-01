@@ -1,0 +1,17 @@
+{
+  "name": "expand",
+  "version": "0.0.1",
+  "author": {
+    "name": "Stephen Mathieson",
+    "email": "me@stephenmathieson.com"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "glob": "~3.1.21"
+  },
+  "devDependencies": {
+    "vows": "latest",
+    "jshint": "latest",
+    "sandboxed-module": "latest"
+  }
+}
