@@ -25,6 +25,20 @@ globs([ '**/*.js', '/foo/bar/*.coffee' ], function (err, files) {
 	console.log('matched:', files);
 });
 
+// sync
+var files = globs.sync([ '**/*.js', '/foo/bar/*.coffee' ], { option: 'stuff' });
+
 ```
+
+## Revision History
+
+### 0.1.0
+
+- Added sync support (`globs.sync(patterns)`)
+
+### 0.0.1
+
+- Initial release
+- Supports `globs(patterns/pattern)`
 
 [glob]: https://github.com/isaacs/node-glob

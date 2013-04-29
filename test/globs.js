@@ -1,80 +1,156 @@
 'use strict';
 
-/*jshint unused:false*/
+//jshint unused:false
 
 var vows = require('vows'),
-	assert = require('assert'),
-	glob = require('glob'),
-	globs = require('../');
+  assert = require('assert'),
+  glob = require('glob'),
+  globs = require('../');
 
-function single(pattern) {
-	return {
-		topic: function () {
-			var p = Array.isArray(pattern) ? pattern[0] : pattern,
-				callback = this.callback;
+function single(pattern, options) {
+  return {
+    topic: function () {
+      var p = Array.isArray(pattern) ? pattern[0] : pattern
+        , callback = this.callback;
 
-			glob(p, function (err, expected) {
-				if (err) {
-					return callback(err);
-				}
+      // eh - it's just tests...
+      if (options) {
+        glob(p, options, function (err, expected) {
+          if (err) {
+            return callback(err);
+          }
 
-				globs(pattern, function (err, actual) {
-					if (err) {
-						return callback(err);
-					}
+          globs(pattern, options, function (err, actual) {
+            if (err) {
+              return callback(err);
+            }
 
-					callback(null, actual, expected);
-				});
-			});
-		},
-		'should not error': function (err, actual, expected) {
-			assert.ifError(err);
-		},
-		'should match glob\'s output': function (err, actual, expected) {
-			assert.deepEqual(actual, expected);
-		}
-	};
+            callback(null, actual, expected);
+          });
+        });
+      } else {
+        glob(p, function (err, expected) {
+          if (err) {
+            return callback(err);
+          }
+
+          globs(pattern, function (err, actual) {
+            if (err) {
+              return callback(err);
+            }
+
+            callback(null, actual, expected);
+          });
+        });
+      }
+    },
+    'should not error': function (err, actual, expected) {
+      assert.ifError(err);
+    },
+    'should match glob\'s output': function (err, actual, expected) {
+      assert.deepEqual(actual, expected);
+    }
+  };
+}
+
+function multiple(options) {
+  return {
+    topic: function () {
+      var callback = this.callback
+        , pattern = './fixtures/*.js'
+        , patterns = [
+          './fixtures/a.js',
+          './fixtures/b.js',
+          './fixtures/c.js'
+        ];
+
+      if (options) {
+
+        glob(pattern, options, function (err, expected) {
+          if (err) {
+            return callback(err);
+          }
+
+          globs(patterns, options, function (err, actual) {
+            if (err) {
+              return callback(err);
+            }
+
+            callback(null, actual, expected);
+          });
+        });
+
+      } else {
+
+        glob(pattern, function (err, expected) {
+          if (err) {
+            return callback(err);
+          }
+
+          globs(patterns, function (err, actual) {
+            if (err) {
+              return callback(err);
+            }
+
+            callback(null, actual, expected);
+          });
+        });
+      }
+    },
+    'should not error': function (err, actual, expected) {
+      assert.ifError(err);
+    },
+    'should match glob\'s output': function (err, actual, expected) {
+      assert.deepEqual(actual, expected);
+    }
+  };
 }
 
 vows
-	.describe('globs')
-	.addBatch({
-		'single pattern': {
-			'as string': single('./fixtures/*.js'),
-			'as array': single(['./fixtures/a.js'])
-		}
-	})
-	.addBatch({
-		'multiple patterns': {
-			topic: function () {
-				var callback = this.callback;
+  .describe('globs')
+  .addBatch({
+    'single pattern': {
+      'as string': single('./fixtures/*.js'),
+      'as array': single(['./fixtures/a.js']),
+      'with options': single('./*.js', { cwd: __dirname + '/fixtures' })
+    }
+  })
+  .addBatch({
+    'multiple patterns': {
+      'options': multiple({ cwd: __dirname }),
+      'no options': multiple()
+    }
+  })
+  .addBatch({
+    'sync': {
+      'single': {
+        topic: function () {
+          var actual = globs.sync('./fixtures/*.js', { cwd: __dirname })
+            , expected = glob.sync('./fixtures/*.js', { cwd: __dirname });
 
-				glob('./fixtures/*.js', function (err, expected) {
-					if (err) {
-						return callback(err);
-					}
+          this.callback(null, actual, expected);
+        },
+        'should support a single pattern': function (err, actual, expected) {
+          assert.deepEqual(actual, expected);
+        }
+      },
+      'multiple': {
+        topic: function () {
+          var patterns = [ './fixtures/*.js', './fixtures/b.js' ]
+            , actual = globs.sync(patterns, { cwd: __dirname })
+            , expected = [
+              './fixtures/a.js',
+              './fixtures/b.js',
+              './fixtures/c.js',
+              './fixtures/b.js'
+            ];
 
-					var patterns = [
-						'./fixtures/a.js',
-						'./fixtures/b.js',
-						'./fixtures/c.js'
-					];
-
-					globs(patterns, function (err, actual) {
-						if (err) {
-							return callback(err);
-						}
-
-						callback(null, actual, expected);
-					});
-				});
-			},
-			'should not error': function (err, actual, expected) {
-				assert.ifError(err);
-			},
-			'should match glob\'s output': function (err, actual, expected) {
-				assert.deepEqual(actual, expected);
-			}
-		}
-	})
-	.export(module);
+          this.callback(null, actual, expected);
+        },
+        'should support multiple patterns': function (err, actual, expected) {
+          assert.deepEqual(actual, expected);
+        }
+      }
+    }
+  })
+  .export(module);
