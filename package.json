@@ -1,10 +1,7 @@
 {
   "name": "globs",
   "version": "0.1.0",
-  "author": {
-    "name": "Stephen Mathieson",
-    "email": "me@stephenmathieson.com"
-  },
+  "author": "Stephen Mathieson <me@stephenmathieson.com>",
   "repository": {
     "type": "git",
     "url": "git://github.com/stephenmathieson/node-globs.git"
@@ -14,8 +11,19 @@
     "glob": "~3.1.21"
   },
   "devDependencies": {
-    "vows": "latest",
-    "jshint": "latest",
-    "sandboxed-module": "latest"
-  }
+    "vows": "~0.7.0",
+    "jshint": "~2.1.4",
+    "sandboxed-module": "~0.2.1"
+  },
+  "description": "An extension of glob, allowing you to provide one or more patterns to match.",
+  "bugs": {
+    "url": "https://github.com/stephenmathieson/node-globs/issues"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "license": "MIT"
 }
