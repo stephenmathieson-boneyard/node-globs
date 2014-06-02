@@ -7,6 +7,24 @@ var vows = require('vows'),
   glob = require('glob'),
   globs = require('../');
 
+function none(pattern, options) {
+  return {
+    topic: function () {
+      if (options) {
+        globs(pattern, options, this.callback);
+      } else {
+        globs(pattern, this.callback);
+      }
+    },
+    'should not error': function (err, actual) {
+      assert.ifError(err);
+    },
+    'should produce empty result': function (err, actual, expected) {
+      assert.deepEqual(actual, []);
+    }
+  };
+}
+
 function single(pattern, options) {
   return {
     topic: function () {
@@ -108,6 +126,13 @@ function multiple(options) {
 
 vows
   .describe('globs')
+  .addBatch({
+    'no pattern': {
+      'as string': none(''),
+      'as array': none([]),
+      'with options': none('', { cwd: __dirname + '/fixtures' })
+    }
+  })
   .addBatch({
     'single pattern': {
       'as string': single('./fixtures/*.js'),

@@ -43,6 +43,14 @@ var globs = module.exports = function (patterns, options, callback) {
     options = {};
   }
 
+  if (!pending) {
+    // nothing to do
+    // ensure callback called asynchronously
+    return process.nextTick(function() {
+      callback(null, []);
+    })
+  }
+
   // walk the patterns
   patterns.forEach(function (pattern) {
     // grab the files
