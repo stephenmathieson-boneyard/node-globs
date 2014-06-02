@@ -30,21 +30,6 @@ var files = globs.sync([ '**/*.js', '/foo/bar/*.coffee' ], { option: 'stuff' });
 
 ```
 
-## Revision History
-
-### 0.1.1
-
-- Added MIT license 
-
-### 0.1.0
-
-- Added sync support (`globs.sync(patterns)`)
-
-### 0.0.1
-
-- Initial release
-- Supports `globs(patterns/pattern)`
-
 ## License
 
 (The MIT License)
