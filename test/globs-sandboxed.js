@@ -10,7 +10,7 @@ var globs,
 
 globs = sandbox.require('..', {
 	requires: {
-		glob: function (pattern, cb) {
+		glob: function (pattern, options, cb) {
 			patterns.push(pattern);
 			cb(null, []);
 		}
