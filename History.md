@@ -1,4 +1,10 @@
 
+0.1.3 / 2017-02-03
+==================
+
+  * Bump versions to remove deprecated minimatch in dependencies (#3)
+  * make release history consistent
+
 0.1.2 / 2014-06-02
 ==================
 
