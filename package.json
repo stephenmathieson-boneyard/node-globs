@@ -8,12 +8,12 @@
   },
   "main": "index.js",
   "dependencies": {
-    "glob": "^4.0.2"
+    "glob": "^7.1.1"
   },
   "devDependencies": {
-    "vows": "~0.7.0",
-    "jshint": "~2.1.4",
-    "sandboxed-module": "~0.2.1"
+    "vows": "~0.8.1",
+    "jshint": "~2.9.4",
+    "sandboxed-module": "~2.0.3"
   },
   "description": "An extension of glob, allowing you to provide one or more patterns to match.",
   "bugs": {
