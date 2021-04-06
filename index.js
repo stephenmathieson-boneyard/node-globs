@@ -19,11 +19,18 @@ var glob = require('glob');
  * globs(['*.js', '../*.js'], { cwd: '/foo' }, function (err, jsfiles) {
  *   console.log(jsfiles)
  * })
+ *
+ * try {
+ *   var jsfiles = await globs([ '../*.js' ]);
+ *   console.log(jsfiles)
+ * } catch (err) {
+ *   throw err;
+ * }
  * ```
  *
  * @param {String|Array} patterns One or more patterns to match
  * @param {Object} [options] Options
- * @param {Function} callback Function which accepts two parameters: err, files
+ * @param {Function} [callback] Function which accepts two parameters: err, files
  */
 var globs = module.exports = function (patterns, options, callback) {
   var pending
