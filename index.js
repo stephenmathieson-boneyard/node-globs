@@ -19,56 +19,70 @@ var glob = require('glob');
  * globs(['*.js', '../*.js'], { cwd: '/foo' }, function (err, jsfiles) {
  *   console.log(jsfiles)
  * })
+ *
+ * try {
+ *   var jsfiles = await globs([ '../*.js' ]);
+ *   console.log(jsfiles)
+ * } catch (err) {
+ *   throw err;
+ * }
  * ```
  *
  * @param {String|Array} patterns One or more patterns to match
  * @param {Object} [options] Options
- * @param {Function} callback Function which accepts two parameters: err, files
+ * @param {Function} [callback] Function which accepts two parameters: err, files
  */
 var globs = module.exports = function (patterns, options, callback) {
   var pending
     , groups = [];
 
-  // not an Array?  make it so!
-  if (!Array.isArray(patterns)) {
-    patterns = [ patterns ];
-  }
+  return new Promise(function(resolve, reject) {
 
-  pending = patterns.length;
+    // not an Array?  make it so!
+    if (!Array.isArray(patterns)) {
+      patterns = [ patterns ];
+    }
 
-  // parameter shifting is really horrible, but i'm
-  // mimicing glob's api...
-  if (typeof options === 'function') {
-    callback = options;
-    options = {};
-  }
+    pending = patterns.length;
 
-  if (!pending) {
-    // nothing to do
-    // ensure callback called asynchronously
-    return process.nextTick(function() {
-      callback(null, []);
-    })
-  }
+    // parameter shifting is really horrible, but i'm
+    // mimicing glob's api...
+    if (typeof options === 'function') {
+      callback = options;
+      options = {};
+    }
 
-  // walk the patterns
-  patterns.forEach(function (pattern) {
-    // grab the files
-    glob(pattern, options, function (err, files) {
-      if (err) {
-        return callback(err);
-      }
+    if (!pending) {
+      // nothing to do
+      // ensure callback called asynchronously
+      return process.nextTick(function() {
+        if (typeof callback === 'function') callback(null, []);
+        resolve();
+      });
+    }
 
-      // add the files to the group
-      groups = groups.concat(files);
+    // walk the patterns
+    patterns.forEach(function (pattern) {
+      // grab the files
+      glob(pattern, options, function (err, files) {
+        if (err) {
+          if (typeof callback === 'function') callback(err);
+          return reject(err);
+        }
 
-      pending -= 1;
-      // last pattern?
-      if (!pending) {
-        // done
-        return callback(null, groups);
-      }
+        // add the files to the group
+        groups = groups.concat(files);
+
+        pending -= 1;
+        // last pattern?
+        if (!pending) {
+          // done
+          if (typeof callback === 'function') callback(null, groups);
+          return resolve(groups);
+        }
+      });
     });
+
   });
 };
 

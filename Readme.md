@@ -28,6 +28,14 @@ globs([ '**/*.js', '/foo/bar/*.coffee' ], function (err, files) {
 // sync
 var files = globs.sync([ '**/*.js', '/foo/bar/*.coffee' ], { option: 'stuff' });
 
+// async/await
+try {
+	var files = await globs([ '**/*.js', '/foo/bar/*.coffee' ]);
+	console.log('matched:', files);
+} catch (err) {
+	throw err;
+}
+
 ```
 
 ## License
